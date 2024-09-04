@@ -23,15 +23,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UsuariosController::class, 'cadastro']);
 Route::get('/lista_usuarios', [UsuariosController::class, 'lista'])->name('lista_usuarios');
 Route::get('/cargos', [CargosController::class, 'cargos']);
-ROute::get('/cidade', [CidadeController::class, 'cidade']);
+Route::get('/cidade', [CidadeController::class, 'cidade']);
 Route::get('/lotacao', [LotacaoController::class, 'index']);
 Route::get('/genero', [GeneroController::class, 'genero']);
 Route::get('/estado', [EstadoController::class, 'estado']);
 Route::get('/mostar-lista', [UsuariosController::class, 'mostarLista']);
 Route::post('/salvar-dados', [SalvarDadosController::class, 'store']);
 
-
 Route::get('/usuario/matheus/cadastro', [UsuariosController::class, 'cadastro']);
-
 Route::get('/usuario/listar', [UsuariosController::class, 'grid']);
 
+// Rota para mostrar o formulário de edição
+Route::get('/usuarios/{id}/edit', [UsuariosController::class, 'edit'])->name('usuarios.edit');
+
+// Rota para atualizar o usuário
+Route::put('/usuarios/{id}', [UsuariosController::class, 'update'])->name('usuarios.update');
+
+// Rota para deletar o usuário
+Route::delete('/usuarios/{id}', [UsuariosController::class, 'destroy'])->name('usuarios.destroy');

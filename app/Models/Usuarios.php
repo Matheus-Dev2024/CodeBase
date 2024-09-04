@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Log;
 
 class Usuarios extends Model
 {
-
     protected $table = 'usuarios';
     protected $fillable = [
         'nome', 'nascimento', 'idade',
@@ -16,7 +15,7 @@ class Usuarios extends Model
         'estado_id', 'cidade_id'
     ];
 
-     public $timestamps = false;
+    public $timestamps = false;
 
     public function genero()
     {
@@ -59,6 +58,3 @@ class Usuarios extends Model
         }
     }
 }
-
-
-

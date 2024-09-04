@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Usuarios;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -18,24 +19,24 @@ class UsuariosController extends Controller
 
     public function grid(): JsonResponse
     {
-        $usuarios = DB::table('usuarios as u')
-            ->join('cargos as c', 'c.id', '=', 'u.cargo_id')
-            ->join('generos as g', 'g.id', '=', 'u.genero_id')
-            ->join('cidades as ci', 'ci.id', '=', 'u.cidade_id')
-            ->join('estados as e', 'e.id', '=', 'ci.estado_id')
-            ->join('lotacoes as l', 'l.id', '=', 'u.lotacao_id')
-            ->get([
+        $usuarios = DB::table('usuarios AS u')
+            ->select(
                 'u.id',
-                'u.nome as nome_usuario',
+                'u.nome AS nome_usuario',
                 'u.idade',
                 'u.nascimento',
-                'c.nome as cargo',
-                'g.nome as genero',
-                'ci.nome as cidade',
-                'e.nome as estado',
-                'l.nome as lotacao'
-            ]);
-
+                'c.nome AS cargo',
+                'g.nome AS genero',
+                'ci.nome AS cidade',
+                'e.nome AS estado',
+                'l.nome AS lotacao'
+            )
+            ->join('cargos AS c', 'c.id', '=', 'u.cargo_id')
+            ->join('generos AS g', 'g.id', '=', 'u.genero_id')
+            ->join('cidades AS ci', 'ci.id', '=', 'u.cidade_id')
+            ->join('estados AS e', 'e.id', '=', 'ci.estado_id')
+            ->join('lotacoes AS l', 'l.id', '=', 'u.lotacao_id')
+            ->get();
 
         return response()->json($usuarios);
     }
@@ -44,4 +45,41 @@ class UsuariosController extends Controller
     {
         return view('cadastro');
     }
+
+    public function edit($id): Factory|View|Application
+    {
+        $usuario = Usuarios::findOrFail($id);
+        return view('editUser', compact('usuario'));
+    }
+
+    public function update(Request $request, $id): JsonResponse
+    {
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'idade' => 'required|integer',
+            'nascimento' => 'required|date',
+            'cargo_id' => 'required|integer',
+            'genero_id' => 'required|integer',
+            'cidade_id' => 'required|integer',
+            'lotacao_id' => 'required|integer',
+        ]);
+
+        $usuario = Usuarios::findOrFail($id);
+        $usuario->update($validatedData);
+
+        return response()->json(['message' => 'Dados atualizados com sucesso']);
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $usuario = Usuarios::find($id);
+
+        if ($usuario) {
+            $usuario->delete();
+            return response()->json(['message' => 'Usuário deletado com sucesso']);
+        } else {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+    }
+
 }

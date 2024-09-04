@@ -4,54 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Tabela de Usuários</title>
 </head>
 <body>
-    <div id="app">
-        <div class="container mt-5 shadow-lg p-3 mb-5 bg-body-dark rounded border">
-
-            <div class="d-flex justify-content-end mb-3 ">
-                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                    <div class="btn-group me-2" role="group" aria-label="First group">
-                        <button class="btn btn-dark" @click="getListaUsuarios">Recarregar tabela</button>
-                    </div>
-                    <div class="btn-group me-2" role="group" aria-label="Second group">
-                        <a href="{{ url('/usuario/matheus/cadastro')  }}" class="btn btn-success">CRIAR USUARIO</a>
-                    </div>
-                </div>
+<div id="app">
+    <div class="container mt-5 shadow-lg p-3 bg-body-dark rounded border">
+        <div class="d-flex">
+            <div class="me-auto p-2">
+                <h1>TABELA DE USUÁRIOS</h1>
             </div>
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Nascimento</th>
-                    <th scope="col">Idade</th>
-                    <th scope="col">Genero</th>
-                    <th scope="col">estado</th>
-                    <th scope="col">cidade</th>
-                    <th scope="col">Cargo</th>
-                    <th scope="col">Lotação</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="usuario in usuarios">
-                    <td>@{{ usuario.nome_usuario }}</td>
-                    <td>@{{ usuario.nascimento  }}</td>
-                    <td>@{{ usuario.idade  }}</td>
-                    <td>@{{ usuario.genero  }}</td>
-                    <td>@{{ usuario.estado  }}</td>
-                    <td>@{{ usuario.cidade  }}</td>
-                    <td>@{{ usuario.cargo  }}</td>
-                    <td>@{{ usuario.lotacao  }}</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="p-2">
+                <a href="{{ url('/usuario/matheus/cadastro') }}" class="btn btn-success">CRIAR USUÁRIO</a>
+            </div>
         </div>
+        <table class="table table-striped table-hover table-bordered text-center ">
+            <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Nascimento</th>
+                <th scope="col">Idade</th>
+                <th scope="col">Gênero</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Cidade</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Lotação</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="usuario in usuarios" :key="usuario.id">
+                <td>@{{ usuario.nome_usuario }}</td>
+                <td>@{{ usuario.nascimento }}</td>
+                <td>@{{ usuario.idade }}</td>
+                <td>@{{ usuario.genero }}</td>
+                <td>@{{ usuario.estado }}</td>
+                <td>@{{ usuario.cidade }}</td>
+                <td>@{{ usuario.cargo }}</td>
+                <td>@{{ usuario.lotacao }}</td>
+                <td>
+                    <button type="button" @click="editarUsuario(usuario.id)" class="btn btn-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" @click="deletarUsuario(usuario.id)" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
 <script>
+
     new Vue({
         el: '#app',
         data: {
@@ -59,18 +74,38 @@
         },
         methods: {
             getListaUsuarios() {
+                console.log('Iniciando a busca dos usuários...');
                 axios.get('http://localhost:8001/usuario/listar')
                     .then(response => {
                         this.usuarios = response.data;
-                })
+                        console.log('Dados dos usuários recebidos:', this.usuarios);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar os dados dos usuários:', error);
+                        alert('Erro ao buscar dados dos usuários. Verifique os logs do console.');
+                    });
+            },
+            editarUsuario(id) {
+                window.location.href = 'http://localhost:8001/usuarios/' + id + '/edit';
+            },
+            deletarUsuario(id) {
+                if (confirm('Tem certeza que deseja deletar este usuário?')) {
+                    axios.delete('http://localhost:8001/usuarios/' + id)
+                        .then(response => {
+                            alert('Usuário deletado com sucesso');
+                            this.getListaUsuarios();
+                        })
+                        .catch(error => {
+                            console.error('Erro ao deletar usuário:', error);
+                            alert('Erro ao deletar usuário. Verifique os logs do console.');
+                        });
+                }
             }
         },
         mounted() {
             this.getListaUsuarios();
         }
     });
-
 </script>
-
 </body>
 </html>
